@@ -25,7 +25,7 @@ BOT TELEGRAM:
 
 $BotToken = "734458093:AAFNojUkBQN1Nbft4fqONRGxctvA0yim7nA"
 $ChatID = '611715845'
-$githubScript = 'https://github.com/whobornin1980/bot/new/master/poc.ps1'
+$githubScript = 'https://github.com/whobornin1980/bot/blob/master/poc.ps1'
 
 
 ###############
