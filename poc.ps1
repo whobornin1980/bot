@@ -23,8 +23,8 @@ BOT TELEGRAM:
 ## CONFIG ##
 ############
 
-$BotToken = "734458093:AAFNojUkBQN1Nbft4fqONRGxctvA0yim7nA"
-$ChatID = '611715845'
+$BotToken = "734458093:AAFjUkBQN1Nbft4fqONRGxctvA0yim7nA"
+$ChatID = ''
 $githubScript = 'https://github.com/whobornin1980/bot/blob/master/poc.ps1'
 
 
