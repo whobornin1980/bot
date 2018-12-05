@@ -20,8 +20,8 @@ BOT TELEGRAM:
 ############
 
 $BotToken = "your_token"
-$ChatID = 'your_chat_id'
-$githubScript = 'https://github.com/whobornin1980/bot/new/master/poc.ps1'
+$ChatID = "your_chat_id"
+$githubScript = 'https://github.com/whobornin1980/bot/new/master/Functions.ps1'
 
 
 ###############
