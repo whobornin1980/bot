@@ -19,7 +19,7 @@ BOT TELEGRAM:
 ## CONFIG ##
 ############
 
-$BotToken = 'your_token'
+$BotToken = "your_token"
 $ChatID = 'your_chat_id'
 $githubScript = 'https://github.com/whobornin1980/bot/new/master/poc.ps1'
 
