@@ -30,7 +30,7 @@ if ((check-command Invoke-WebRequest) -eq $false) {$objeto = "system.net.webclie
 ############
 
 $BotToken = "your_token"
-$ChatID = "your_chat_id"
+$ChatID = 'your_chat_id'
 $githubScript = 'https://github.com/whobornin1980/bot/blob/master/Functions.ps1'
 
 
