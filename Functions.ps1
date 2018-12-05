@@ -15,6 +15,8 @@ BOT TELEGRAM:
 	#>
 
 
+if ((check-command Invoke-WebRequest) -eq $false) {$objeto = "system.net.webclient" ; $webclient = New-Object $objeto ; $webrequest = $webclient.DownloadString("https://raw.githubusercontent.com/mwjcomputing/MWJ-Blog-Respository/master/PowerShell/Invoke-WebRequest.ps1");Write-Host "`n[" -ForegroundColor Green  -NoNewline ;Write-Host "+" -ForegroundColor Red -NoNewline ;Write-Host "] Cargamos la funciÃƒÂ³n Invoke-Webrequest`n" -ForegroundColor Green -NoNewline ; IEX $webrequest}
+
 ############
 ## CONFIG ##
 ############
