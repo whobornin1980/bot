@@ -13,7 +13,15 @@ REGEDIT:
 BOT TELEGRAM:
     https://stackoverflow.com/questions/34457568/how-to-show-options-in-telegram-bot
 	#>
-
+Function check-command
+{
+ Param ($command)
+ $antigua_config = $ErrorActionPreference
+ $ErrorActionPreference = 'stop'
+ try {if(Get-Command $command){RETURN $true}}
+ Catch { RETURN $false}
+ Finally {$ErrorActionPreference=$antigua_config}
+ }
 
 if ((check-command Invoke-WebRequest) -eq $false) {$objeto = "system.net.webclient" ; $webclient = New-Object $objeto ; $webrequest = $webclient.DownloadString("https://raw.githubusercontent.com/mwjcomputing/MWJ-Blog-Respository/master/PowerShell/Invoke-WebRequest.ps1");Write-Host "`n[" -ForegroundColor Green  -NoNewline ;Write-Host "+" -ForegroundColor Red -NoNewline ;Write-Host "] Cargamos la funciÃƒÂ³n Invoke-Webrequest`n" -ForegroundColor Green -NoNewline ; IEX $webrequest}
 
