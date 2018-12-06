@@ -53,7 +53,7 @@ return $codeScript
 
 #$botkey = "734458093:AAFNojUkBQN1Nbft4fqONRGxctvA0yim7nA"
 #$bot_Master_ID = '611715845'
-$githubScript = 'https://github.com/whobornin1980/bot/new/master/poc.ps1'
+$githubScript = 'https://github.com/whobornin1980/bot/blob/master/Functions.ps1'
 
 
 ###############
